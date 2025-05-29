@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+<div class="button-container">
+    <button class="action-btn" onclick="location.href='{{ url_for('patient.register_patient') }}'">
+        Register New Patient
+    </button>
+    <button class="action-btn">
+        View All Patients
+    </button>
+</div>
+</body>
+</html>

@@ -1,0 +1,186 @@
+/* Apply box-sizing border-box globally */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+/* Base styles */
+body {
+    font-family: Arial, sans-serif;
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Login container */
+.login-container {
+    width: 90%;
+    max-width: 350px;
+    padding: 30px 25px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+/* Heading */
+.login-container h2 {
+    color: #333;
+    margin-bottom: 25px;
+    font-weight: 600;
+}
+
+/* Inputs and button styling */
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 12px 15px;
+    margin-bottom: 15px;
+    border: 1.5px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+    border-color: #000dff;
+    outline: none;
+}
+
+/* Button */
+button {
+    width: 100%;
+    padding: 12px 15px;
+    background-color: #000dff;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-weight: 700;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #4a52ff;
+}
+
+/* Flash message */
+.flash.error {
+    color: #d93025;
+    margin-bottom: 15px;
+    font-weight: 600;
+    text-align: left;
+}
+
+input, button {
+    width: 100%;
+    padding: 12px 15px;
+    box-sizing: border-box;
+    margin-bottom: 15px;
+}
+
+.button-container {
+    background: white;
+    padding: 80px 50px;
+    border-radius: 20px;
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.25);
+    width: 95%;
+    max-width: 500px;
+    text-align: center;
+}
+
+button.action-btn {
+    width: 100%;
+    padding: 30px 0;
+    margin: 25px 0;
+    font-size: 28px;
+    font-weight: 800;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    color: white;
+    background-color: #000dff;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+button.action-btn:hover {
+    background-color: #4a52ff;
+    transform: scale(1.02);
+}
+
+/* Center the form */
+.form-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    background-color: #f5f5f5;
+}
+/* Container box */
+/* Make form container a bit wider on mobile */
+.form-box {
+    background: white;
+    padding: 30px 25px;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    width: 95%;
+    max-width: 460px;  /* increased width */
+    box-sizing: border-box;
+}
+
+/* Improve label spacing */
+form label {
+    display: block;
+    margin-bottom: 6px;
+    margin-top: 16px;
+    font-weight: 600;
+    color: #333;
+}
+
+form input[type="text"],
+form input[type="number"],
+form input[type="date"],
+form select {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+/* Fix radio groups */
+.radio-inline {
+    display: flex;
+    flex-wrap: wrap; /* allows wrapping on small screens */
+    gap: 15px;
+    margin-bottom: 16px;
+    align-items: center;
+}
+.radio-inline label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    font-weight: 500;
+}
+
+button {
+    width: 100%;
+    padding: 14px;
+    background-color: #000dff;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #4a52ff;
+}

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Register Patient</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+<div class="form-wrapper">
+    <div class="form-box">
+        <h2>Register Patient</h2>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <form method="POST">
+            <label for="name">Name:</label>
+            <input type="text" name="name" id="name" required>
+
+            <label for="age">Age:</label>
+            <input type="number" name="age" id="age" required>
+
+            <label>Sex:</label>
+            <div class="radio-inline">
+                <label><input type="radio" name="sex" value="M" required> Male</label>
+                <label><input type="radio" name="sex" value="F"> Female</label>
+                <label><input type="radio" name="sex" value="O"> Other</label>
+            </div>
+
+            <label for="mobile">Mobile Number:</label>
+            <input type="tel" id="mobile" name="mobile" placeholder="Enter 10-digit mobile number" required pattern="[0-9]{10}">
+
+            <label for="address">Address:</label>
+            <input type="text" name="address" id="address">
+
+            <label>Bite Type:</label>
+            <div class="radio-inline">
+                <label><input type="radio" name="bite_type" value="New" required> New</label>
+                <label><input type="radio" name="bite_type" value="Re-exposure"> Re-exposure</label>
+            </div>
+
+            <label for="bite_date">Date of Bite:</label>
+            <input type="date" name="bite_date" id="bite_date" required>
+
+            <label>Bite Category:</label>
+            <div class="radio-inline">
+                <input type="radio" name="bite_category" value="II" required> Category II
+                <input type="radio" name="bite_category" value="III"> Category III
+            </div>
+
+            <!-- Dose Schedule Display -->
+            <div id="dose-schedule" style="margin-top: 20px;"></div>
+
+            <button type="submit">Register</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function calculateDoses() {
+        const biteTypeInput = document.querySelector('input[name="bite_type"]:checked');
+        const outputDiv = document.getElementById('dose-schedule');
+        outputDiv.innerHTML = '';
+
+        if (!biteTypeInput) {
+            return; // Need both inputs
+        }
+
+        const biteType = biteTypeInput.value.toLowerCase();
+        const baseDate = new Date();
+
+
+        let days = [];
+        let doseStartIndex = 1;
+
+        if (biteType === 'new') {
+            // For new: skip dose 1 (day 0), show dose 2,3,4 at days 3,7,28
+            days = [3, 7, 28];
+            doseStartIndex = 2;
+        } else if (biteType === 're-exposure') {
+            // For re-exposure: only dose 1 at day 3
+            days = [3];
+            doseStartIndex = 1;
+        }
+
+        const doseLines = days.map((d, i) => {
+            const doseDate = new Date(baseDate);
+            doseDate.setDate(doseDate.getDate() + d);
+            const formattedDate = doseDate.toISOString().split('T')[0];
+            return `Dose ${doseStartIndex + i} - ${formattedDate}`;
+        });
+
+        outputDiv.innerHTML = '<b>Scheduled Doses:</b><br><br>' + doseLines.join('<br>') + '<br><br>';
+    }
+
+    // Attach event listeners on bite_type radios and bite_date input
+    document.querySelectorAll('input[name="bite_type"]').forEach(el => el.addEventListener('change', calculateDoses));
+    document.getElementById('bite_date').addEventListener('change', calculateDoses);
+</script>
+</body>
+</html>
