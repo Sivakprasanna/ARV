@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ patient.name }} - Details</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />    
+</head>
+<body>
+
+<div class="container">
+    <p style="text-align: center; margin-top: 20px;">
+        <a href="{{ url_for('general.view_patients') }}" style="text-decoration: none; color: #007bff;">← Back to Patients List</a>
+    </p>
+    <h2>{{ patient.name }} ({{ patient.patient_id }})</h2>
+
+    <div class="section">
+        <p><strong>Age:</strong> {{ patient.age }}</p>
+        <p><strong>Gender:</strong> {{ patient.sex }}</p>
+        <p><strong>Mobile:</strong> {{ patient.mobile }}</p>
+        <p><strong>Address:</strong> {{ patient.address }}</p>
+        <p><strong>Notified:</strong> {{ 'Yes' if patient.notified else 'No' }}</p>
+
+    </div>
+
+    {% for exposure in dose_schedules %}
+    <div class="section">
+        <h3>Exposure: {{ exposure.exposure_type | capitalize }} (Category {{ exposure.category }})</h3>
+        <p><strong>Bite Date:</strong> {{ exposure.bite_date }}</p>
+
+
+        <table>
+            <tr>
+                <th>Dose</th>
+                <th>Scheduled Date</th>
+                <th>Actual Date</th>
+                <th>Status</th>
+            </tr>
+            {% for dose in exposure.doses %}
+            <tr>
+                <td>{{ dose.dose_number }}</td>
+                <td>{{ dose.scheduled_date }}</td>
+                <td>{{ dose.actual_date if dose.actual_date else '—' }}</td>
+                <td>
+                    {{ dose.status | capitalize }}
+                    {% if dose.status == 'pending' and dose.scheduled_date <= current_date %}
+                    <form method="POST" action="{{ url_for('general.update_dose', dose_id=dose.id) }}" style="margin-top: 5px;">
+                        <button type="submit">Mark as Given</button>
+                    </form>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+
+        </table>
+    </div>
+    {% endfor %}
+</div>
+
+</body>
+</html>

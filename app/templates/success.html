@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Registered</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+<div class="success-container">
+    <h2>✅ Registration Successful!</h2>
+    <div class="info-item"><strong>Name:</strong> {{ name }}</div>
+    <div class="info-item"><strong>Patient ID:</strong> {{ patient_id }}</div>
+
+    <div class="dose-list">
+        <strong>Dose Schedule:</strong>
+        <ul>
+            {% for dose_number, date in dose_schedule %}
+            <li>Dose {{ dose_number }} - {{ date }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <form action="{{ url_for('patient.home') }}">
+        <button type="submit" class="btn-home">Back to Home</button>
+    </form>
+</div>
+</body>
+</html>

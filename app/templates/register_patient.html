@@ -38,10 +38,10 @@
             <label for="address">Address:</label>
             <input type="text" name="address" id="address">
 
-            <label>Bite Type:</label>
+            <label>Re-exposure: </label>
             <div class="radio-inline">
-                <label><input type="radio" name="bite_type" value="New" required> New</label>
-                <label><input type="radio" name="bite_type" value="Re-exposure"> Re-exposure</label>
+                <label><input type="radio" name="bite_type" value="Re-exposure"> Yes</label>
+                <label><input type="radio" name="bite_type" value="New" required> No</label>
             </div>
 
             <label for="bite_date">Date of Bite:</label>
@@ -49,8 +49,8 @@
 
             <label>Bite Category:</label>
             <div class="radio-inline">
-                <input type="radio" name="bite_category" value="II" required> Category II
-                <input type="radio" name="bite_category" value="III"> Category III
+                <label><input type="radio" name="bite_category" value="II" required>II</label>
+                <label><input type="radio" name="bite_category" value="III"> III</label>
             </div>
 
             <!-- Dose Schedule Display -->
@@ -61,46 +61,5 @@
     </div>
 </div>
 
-<script>
-    function calculateDoses() {
-        const biteTypeInput = document.querySelector('input[name="bite_type"]:checked');
-        const outputDiv = document.getElementById('dose-schedule');
-        outputDiv.innerHTML = '';
-
-        if (!biteTypeInput) {
-            return; // Need both inputs
-        }
-
-        const biteType = biteTypeInput.value.toLowerCase();
-        const baseDate = new Date();
-
-
-        let days = [];
-        let doseStartIndex = 1;
-
-        if (biteType === 'new') {
-            // For new: skip dose 1 (day 0), show dose 2,3,4 at days 3,7,28
-            days = [3, 7, 28];
-            doseStartIndex = 2;
-        } else if (biteType === 're-exposure') {
-            // For re-exposure: only dose 1 at day 3
-            days = [3];
-            doseStartIndex = 1;
-        }
-
-        const doseLines = days.map((d, i) => {
-            const doseDate = new Date(baseDate);
-            doseDate.setDate(doseDate.getDate() + d);
-            const formattedDate = doseDate.toISOString().split('T')[0];
-            return `Dose ${doseStartIndex + i} - ${formattedDate}`;
-        });
-
-        outputDiv.innerHTML = '<b>Scheduled Doses:</b><br><br>' + doseLines.join('<br>') + '<br><br>';
-    }
-
-    // Attach event listeners on bite_type radios and bite_date input
-    document.querySelectorAll('input[name="bite_type"]').forEach(el => el.addEventListener('change', calculateDoses));
-    document.getElementById('bite_date').addEventListener('change', calculateDoses);
-</script>
 </body>
 </html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Patients List</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='patientList.css') }}">
+</head>
+<body>
+
+<h2>Patients List</h2>
+
+<button id="menuBtn" class="menu-btn">☰ Filters</button>
+<a href="/patient/home"><button class="back-btn">← Back</button></a>
+
+<div id="filterPanel" class="filter-panel">
+    <br><br>
+    <label>Status</label>
+    <select id="statusFilter">
+        <option value="">All</option>
+        <option value="pending">Pending</option>
+        <option value="completed">Completed</option>
+    </select>
+
+    <label>Name</label>
+    <input type="text" id="nameFilter" placeholder="Search by name">
+
+    <label>Patient ID</label>
+    <input type="text" id="idFilter" placeholder="Search by ID">
+
+    <label><input type="checkbox" id="todayFilter"> Today's Doses</label>
+
+    <button class="apply-btn" onclick="applyFilters()">Apply Filters</button>
+</div>
+
+<div class="top-bar">
+    <input type="text" id="globalSearch" placeholder="Search by name or ID" oninput="applyFilters()">
+</div>
+
+<table id="patientsTable">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Patient ID</th>
+        <th>Status</th>
+        <th>View</th>
+    </tr>
+    </thead>
+    <tbody id="patientsBody">
+    {% for patient in patients %}
+    <tr
+            data-name="{{ patient.name|lower }}"
+            data-id="{{ patient.patient_id|lower }}"
+            data-status="{{ patient.dose_status|lower }}"
+            data-today="{{ 'yes' if patient.has_today_dose else 'no' }}"
+    >
+        <td>{{ patient.name }}</td>
+        <td>{{ patient.patient_id }}</td>
+        <td>{{ patient.dose_status }}</td>
+        <td><a href="{{ url_for('general.patient_detail', patient_id=patient.id) }}">View</a></td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<script>
+    document.getElementById("menuBtn").addEventListener("click", function () {
+        document.getElementById("filterPanel").classList.toggle("open");
+    });
+
+    function applyFilters() {
+        const nameFilter = document.getElementById("nameFilter").value.toLowerCase();
+        const idFilter = document.getElementById("idFilter").value.toLowerCase();
+        const statusFilter = document.getElementById("statusFilter").value.toLowerCase();
+        const globalSearch = document.getElementById("globalSearch").value.toLowerCase();
+        const todayFilter = document.getElementById("todayFilter").checked;
+
+        const rows = document.querySelectorAll("#patientsBody tr");
+        rows.forEach(row => {
+            const name = row.dataset.name;
+            const id = row.dataset.id;
+            const status = row.dataset.status;
+            const today = row.dataset.today === "yes";
+
+            const match =
+                (!nameFilter || name.includes(nameFilter)) &&
+                (!idFilter || id.includes(idFilter)) &&
+                (!statusFilter || status === statusFilter) &&
+                (!globalSearch || name.includes(globalSearch) || id.includes(globalSearch)) &&
+                (!todayFilter || today);
+
+            row.style.display = match ? "" : "none";
+        });
+        document.getElementById("filterPanel").classList.remove("open");
+    }
+</script>
+
+</body>
+</html>

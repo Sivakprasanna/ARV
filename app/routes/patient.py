@@ -8,7 +8,7 @@ patient_bp = Blueprint('patient', __name__, url_prefix='/patient')
 
 # Utility to generate unique patient_id
 def generate_patient_id():
-    return 'RAB' + ''.join(random.choices(string.digits, k=6))
+    return 'RAB' + ''.join(random.choices(string.digits, k=4))
 
 @patient_bp.route('/register', methods=['GET', 'POST'])
 def register_patient():
@@ -43,7 +43,8 @@ def register_patient():
             exposure_id = cursor.lastrowid
 
             # Calculate and insert dose_schedule based on exposure type
-            bite_date_obj = datetime.strptime(bite_date, "%Y-%m-%d")
+            today = datetime.today()
+
 
             if bite_type.lower() == 'new':
                 # Skip Day 0, schedule Day 3, 7, 28
@@ -55,13 +56,20 @@ def register_patient():
                 dose_days = []
 
             for i, d in enumerate(dose_days):
-                scheduled = bite_date_obj + timedelta(days=d)
+                scheduled = today + timedelta(days=d)
                 cursor.execute("""
                     INSERT INTO dose_schedule (exposure_id, dose_number, scheduled_date)
                     VALUES (%s, %s, %s)
                 """, (exposure_id, i + 1, scheduled.date()))
 
-            conn.commit()
+            dose_schedule = [(i + 1, (today + timedelta(days=d)).strftime('%Y-%m-%d')) for i, d in enumerate(dose_days)]
+
+
+            return render_template('success.html',
+                                   name=name,
+                                   patient_id=patient_id,
+                                   dose_schedule=dose_schedule)
+
             flash('Patient registered successfully with ARV schedule!', 'success')
 
         except Exception as e:
