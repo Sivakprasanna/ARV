@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, flash, redirect
+from flask import Blueprint, render_template, flash, redirect, session
 from app.db import get_db_connection
 from flask import request
 from datetime import date
@@ -79,7 +79,8 @@ def patient_detail(patient_id):
     print("Patient:", patient)
     print("Dose Schedules:", dose_schedules)
     print("Current Date:", date.today())
-    return render_template('patient_detail.html', patient=patient,dose_schedules=dose_schedules,current_date=date.today())
+    role = session.get('role', '')
+    return render_template('patient_detail.html',role=role, patient=patient,dose_schedules=dose_schedules,current_date=date.today())
 
 
 @general_bp.route('/dose/<int:dose_id>/update', methods=['POST'])

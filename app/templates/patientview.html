@@ -36,31 +36,33 @@
     <input type="text" id="globalSearch" placeholder="Search by name or ID" oninput="applyFilters()">
 </div>
 
-<table id="patientsTable">
-    <thead>
-    <tr>
-        <th>Name</th>
-        <th>Patient ID</th>
-        <th>Status</th>
-        <th>View</th>
-    </tr>
-    </thead>
-    <tbody id="patientsBody">
+<div id="patientsList" class="patient-list">
     {% for patient in patients %}
-    <tr
-            data-name="{{ patient.name|lower }}"
-            data-id="{{ patient.patient_id|lower }}"
-            data-status="{{ patient.dose_status|lower }}"
-            data-today="{{ 'yes' if patient.has_today_dose else 'no' }}"
+    <div class="patient-card"
+        data-name="{{ patient.name|lower }}"
+        data-id="{{ patient.patient_id|lower }}"
+        data-status="{{ patient.dose_status|lower }}"
+        data-today="{{ 'yes' if patient.has_today_dose else 'no' }}"
     >
-        <td>{{ patient.name }}</td>
-        <td>{{ patient.patient_id }}</td>
-        <td>{{ patient.dose_status }}</td>
-        <td><a href="{{ url_for('general.patient_detail', patient_id=patient.id) }}">View</a></td>
-    </tr>
+        <div class="info-group">
+            <span class="label">Name:</span>
+            <span class="value">{{ patient.name }}</span>
+        </div>
+        <div class="info-group">
+            <span class="label">Patient ID:</span>
+            <span class="value">{{ patient.patient_id }}</span>
+        </div>
+        <div class="info-group">
+            <span class="label">Status:</span>
+            <span class="value">{{ patient.dose_status }}</span>
+        </div>
+        <div class="info-group">
+            <a href="{{ url_for('general.patient_detail', patient_id=patient.id) }}" class="view-btn">View Details</a>
+        </div>
+    </div>
     {% endfor %}
-    </tbody>
-</table>
+</div>
+
 
 <script>
     document.getElementById("menuBtn").addEventListener("click", function () {
@@ -74,12 +76,12 @@
         const globalSearch = document.getElementById("globalSearch").value.toLowerCase();
         const todayFilter = document.getElementById("todayFilter").checked;
 
-        const rows = document.querySelectorAll("#patientsBody tr");
-        rows.forEach(row => {
-            const name = row.dataset.name;
-            const id = row.dataset.id;
-            const status = row.dataset.status;
-            const today = row.dataset.today === "yes";
+        const cards = document.querySelectorAll(".patient-card");
+        cards.forEach(card => {
+            const name = card.dataset.name;
+            const id = card.dataset.id;
+            const status = card.dataset.status;
+            const today = card.dataset.today === "yes";
 
             const match =
                 (!nameFilter || name.includes(nameFilter)) &&
@@ -88,7 +90,7 @@
                 (!globalSearch || name.includes(globalSearch) || id.includes(globalSearch)) &&
                 (!todayFilter || today);
 
-            row.style.display = match ? "" : "none";
+            card.style.display = match ? "" : "none";
         });
         document.getElementById("filterPanel").classList.remove("open");
     }

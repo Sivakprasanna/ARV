@@ -42,7 +42,7 @@
                 <td>{{ dose.actual_date if dose.actual_date else '—' }}</td>
                 <td>
                     {{ dose.status | capitalize }}
-                    {% if dose.status == 'pending' and dose.scheduled_date <= current_date %}
+                    {% if dose.status == 'pending' and dose.scheduled_date <= current_date and role == 'PHC Staff' %}
                     <form method="POST" action="{{ url_for('general.update_dose', dose_id=dose.id) }}" style="margin-top: 5px;">
                         <button type="submit">Mark as Given</button>
                     </form>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rabies Patient Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <div class="dashboard-container">
+        <h1>Monthly Rabies Dashboard</h1>
+
+        <!-- Statistics Grid -->
+        <div class="stats-grid">
+            <div class="stat-box">
+                <div class="stat-title">Cases This Month</div>
+                <div class="stat-value" id="case-count">0</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-title">Total Dosages</div>
+                <div class="stat-value" id="dose-count">0</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-title">Completed Dosages</div>
+                <div class="stat-value" id="completed-count">0</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-title">Missed Dosages</div>
+                <div class="stat-value" id="missed-count">0</div>
+            </div>
+        </div>
+
+        <!-- Chart Container -->
+        <div class="chart-container">
+            <canvas id="doseChart"></canvas>
+        </div>
+
+        <!-- Chart Navigation Buttons -->
+        <div class="chart-navigation">
+            <button onclick="loadPrevious()">Previous</button>
+            <button onclick="loadNext()">Next</button>
+        </div>
+    </div>
+
+    <script>
+        let currentMonthOffset = 0;
+
+        function updateStats(data) {
+            document.getElementById("case-count").innerText = data.case_count;
+            document.getElementById("dose-count").innerText = data.total_doses;
+            document.getElementById("completed-count").innerText = data.completed_doses;
+            document.getElementById("missed-count").innerText = data.missed_doses;
+        }
+
+        function renderChart(chartData) {
+            // Check if chart already exists and is an instance of Chart
+            if (window.doseChart instanceof Chart) {
+                window.doseChart.destroy();
+            }
+
+            const ctx = document.getElementById('doseChart').getContext('2d');
+            window.doseChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: chartData.labels,
+                    datasets: [
+                        {
+                            label: 'Total Doses',
+                            data: chartData.total_doses,
+                            backgroundColor: '#007bff'
+                        },
+                        {
+                            label: 'Completed Doses',
+                            data: chartData.completed_doses,
+                            backgroundColor: '#28a745'
+                        },
+                        {
+                            label: 'Missed Doses',
+                            data: chartData.missed_doses,
+                            backgroundColor: '#dc3545'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { stepSize: 1 }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top'
+                        },
+                        title: {
+                            display: true,
+                            text: 'Monthly Dose Summary'
+                        }
+                    }
+                }
+            });
+        }
+
+
+        function fetchDashboardData() {
+            fetch(`/dashboard-data?offset=${currentMonthOffset}`)
+                .then(response => response.json())
+                .then(data => {
+                    updateStats(data.stats);
+                    renderChart(data.chart);
+                });
+        }
+
+        function loadPrevious() {
+            currentMonthOffset -= 1;
+            fetchDashboardData();
+        }
+
+        function loadNext() {
+            currentMonthOffset += 1;
+            fetchDashboardData();
+        }
+
+        // Initial load
+        fetchDashboardData();
+    </script>
+
+</body>
+</html>

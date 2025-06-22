@@ -1,4 +1,5 @@
 SECRET_KEY = 'your_secret_key'
 MYSQL_USER = 'root'
-MYSQL_PASSWORD = 'student@srv'
-MYSQL_DB = 'AnuAkka'
+MYSQL_PASSWORD = 'root'
+MYSQL_DB = 'ARV'
+FAST2SMS_API_KEY = 'JfHLaXt7gAGru2BNh3FzydDSjEqm0oITeKi8PYkQv16WpswM4Zjv5bJGs6hFxg9ocXuw7BVn8DaSdT4t'

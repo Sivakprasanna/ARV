@@ -1,6 +1,6 @@
 from apscheduler.schedulers.background import BackgroundScheduler
-from app.notifications import get_pending_dose_reminders
-from app.utils.sms_sender import send_sms
+from app.scheduler.notification import get_pending_dose_reminders
+from app.scheduler.sms_sender import send_sms
 import datetime
 
 def job_send_sms_reminders():
@@ -14,5 +14,5 @@ def job_send_sms_reminders():
 
 def start_scheduler():
     scheduler = BackgroundScheduler()
-    scheduler.add_job(job_send_sms_reminders, 'cron', hour=8, minute=0)
+    scheduler.add_job(job_send_sms_reminders, 'cron', hour=8, minute=18)
     scheduler.start()

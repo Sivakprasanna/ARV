@@ -23,7 +23,8 @@ def login():
         conn.close()
 
         if user:
-            session['user'] = user['username']
+            session['role'] = user['username']
+            print(session['role'])
             return redirect(url_for('patient.home'))
         else:
             flash("Invalid username or password", "error")

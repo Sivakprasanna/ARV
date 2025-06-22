@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, make_response, render_template, request, redirect, session, url_for, flash
 from app.db import get_db_connection
 from datetime import datetime, timedelta
 import random
@@ -85,4 +85,13 @@ def register_patient():
 
 @patient_bp.route('/home')
 def home():
-    return render_template('home.html')
+    role = session.get('role', '').strip().lower().replace(' ', '_')
+    if not role:
+        return redirect(url_for('auth.login'))  # fallback
+
+    # Prevent browser from caching the page
+    response = make_response(render_template('home.html', role=role))
+    response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "0"
+    return response

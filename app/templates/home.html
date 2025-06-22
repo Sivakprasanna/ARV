@@ -6,12 +6,35 @@
 </head>
 <body>
 <div class="button-container">
-    <button class="action-btn" onclick="location.href='{{ url_for('patient.register_patient') }}'">
-        Register New Patient
-    </button>
-    <button class="action-btn" onclick="location.href='{{ url_for('general.view_patients') }}'">
-        View All Patients
-    </button>
+    <div id="staff-buttons" style="display: none;">
+        <button class="action-btn" onclick="location.href='{{ url_for('patient.register_patient') }}'">
+            Register New Patient
+        </button>
+        <button class="action-btn" onclick="location.href='{{ url_for('general.view_patients') }}'">
+            View All Patients
+        </button>
+    </div>
+
+    <div id="officer-buttons" style="display: none;">
+        <button class="action-btn" onclick="location.href='{{ url_for('general.view_patients') }}'">
+            View All Patients
+        </button>
+        <button class="action-btn" onclick="location.href='{{ url_for('dashboard.dashboard_page') }}'">
+            View Dashboard
+        </button>
+    </div>
 </div>
+
+<script>
+    const role = "{{ role }}";
+
+    if (role === "phc_staff") {
+        document.getElementById("staff-buttons").style.display = "block";
+    } else if (role === "medical_officer") {
+        document.getElementById("officer-buttons").style.display = "block";
+    }
+</script>
+
 </body>
+
 </html>
