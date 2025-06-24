@@ -5,6 +5,7 @@
     <title>Rabies Patient Dashboard</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
 
@@ -41,6 +42,14 @@
             <button onclick="loadPrevious()">Previous</button>
             <button onclick="loadNext()">Next</button>
         </div>
+
+        <!-- Download Button -->
+        <div class="download-section">
+            <button class="download-btn" onclick="downloadReport()">
+                <span class="download-icon">📊</span>
+                Download Report
+            </button>
+        </div>
     </div>
 
     <script>
@@ -60,6 +69,12 @@
             }
 
             const ctx = document.getElementById('doseChart').getContext('2d');
+            
+            // Calculate bar thickness based on screen size
+            const isMobile = window.innerWidth <= 768;
+            const barThickness = isMobile ? 25 : 40;
+            const maxBarThickness = isMobile ? 30 : 50;
+            
             window.doseChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
@@ -68,42 +83,94 @@
                         {
                             label: 'Total Doses',
                             data: chartData.total_doses,
-                            backgroundColor: '#007bff'
+                            backgroundColor: '#007bff',
+                            barThickness: barThickness,
+                            maxBarThickness: maxBarThickness
                         },
                         {
                             label: 'Completed Doses',
                             data: chartData.completed_doses,
-                            backgroundColor: '#28a745'
+                            backgroundColor: '#28a745',
+                            barThickness: barThickness,
+                            maxBarThickness: maxBarThickness
                         },
                         {
                             label: 'Missed Doses',
                             data: chartData.missed_doses,
-                            backgroundColor: '#dc3545'
+                            backgroundColor: '#dc3545',
+                            barThickness: barThickness,
+                            maxBarThickness: maxBarThickness
                         }
                     ]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    layout: {
+                        padding: {
+                            top: isMobile ? 8 : 10,
+                            bottom: isMobile ? 8 : 10,
+                            left: isMobile ? 8 : 10,
+                            right: isMobile ? 8 : 10
+                        }
+                    },
                     scales: {
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                font: {
+                                    size: isMobile ? 16 : 14
+                                }
+                            }
+                        },
                         y: {
                             beginAtZero: true,
-                            ticks: { stepSize: 1 }
+                            ticks: { 
+                                stepSize: 1,
+                                font: {
+                                    size: isMobile ? 16 : 14
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(0,0,0,0.1)'
+                            }
                         }
                     },
                     plugins: {
                         legend: {
-                            position: 'top'
+                            position: 'top',
+                            display: true,
+                            labels: {
+                                padding: isMobile ? 12 : 15,
+                                font: {
+                                    size: isMobile ? 15 : 12
+                                },
+                                usePointStyle: true,
+                                pointStyle: 'rect',
+                                boxWidth: isMobile ? 16 : 15,
+                                boxHeight: isMobile ? 12 : 10
+                            }
                         },
                         title: {
                             display: true,
-                            text: 'Monthly Dose Summary'
+                            text: 'Monthly Dose Summary',
+                            font: {
+                                size: isMobile ? 18 : 16,
+                                weight: 'bold'
+                            },
+                            padding: {
+                                top: isMobile ? 8 : 10,
+                                bottom: isMobile ? 12 : 15
+                            }
                         }
-                    }
+                    },
+                    categoryPercentage: 0.8,
+                    barPercentage: 0.9
                 }
             });
         }
-
 
         function fetchDashboardData() {
             fetch(`/dashboard-data?offset=${currentMonthOffset}`)
@@ -124,8 +191,117 @@
             fetchDashboardData();
         }
 
+        // Handle window resize to update chart responsiveness
+        window.addEventListener('resize', function() {
+            if (window.doseChart instanceof Chart) {
+                const isMobile = window.innerWidth <= 768;
+                const barThickness = isMobile ? 25 : 40;
+                const maxBarThickness = isMobile ? 30 : 50;
+                
+                // Update bar thickness for all datasets
+                window.doseChart.data.datasets.forEach(dataset => {
+                    dataset.barThickness = barThickness;
+                    dataset.maxBarThickness = maxBarThickness;
+                });
+                
+                // Update font sizes
+                window.doseChart.options.scales.x.ticks.font.size = isMobile ? 16 : 14;
+                window.doseChart.options.scales.y.ticks.font.size = isMobile ? 16 : 14;
+                window.doseChart.options.plugins.legend.labels.font.size = isMobile ? 15 : 12;
+                window.doseChart.options.plugins.legend.labels.padding = isMobile ? 12 : 15;
+                window.doseChart.options.plugins.legend.labels.boxWidth = isMobile ? 16 : 15;
+                window.doseChart.options.plugins.legend.labels.boxHeight = isMobile ? 12 : 10;
+                window.doseChart.options.plugins.title.font.size = isMobile ? 18 : 16;
+                window.doseChart.options.plugins.title.padding.top = isMobile ? 8 : 10;
+                window.doseChart.options.plugins.title.padding.bottom = isMobile ? 12 : 15;
+                
+                window.doseChart.update();
+            }
+        });
+
         // Initial load
         fetchDashboardData();
+
+        // Download Report Function
+        function downloadReport() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Get current data
+            const caseCount = document.getElementById("case-count").innerText;
+            const doseCount = document.getElementById("dose-count").innerText;
+            const completedCount = document.getElementById("completed-count").innerText;
+            const missedCount = document.getElementById("missed-count").innerText;
+            
+            // Get current date for report
+            const currentDate = new Date();
+            const reportDate = currentDate.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            
+            // Calculate month for report
+            const reportMonth = new Date();
+            reportMonth.setMonth(reportMonth.getMonth() + currentMonthOffset);
+            const monthYear = reportMonth.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long'
+            });
+            
+            // PDF Content
+            doc.setFontSize(20);
+            doc.setFont(undefined, 'bold');
+            doc.text('Monthly Rabies Dashboard Report', 20, 30);
+            
+            doc.setFontSize(12);
+            doc.setFont(undefined, 'normal');
+            doc.text(`Report Period: ${monthYear}`, 20, 45);
+            doc.text(`Generated on: ${reportDate}`, 20, 55);
+            
+            // Add line separator
+            doc.line(20, 65, 190, 65);
+            
+            // Statistics Section
+            doc.setFontSize(16);
+            doc.setFont(undefined, 'bold');
+            doc.text('Summary Statistics', 20, 80);
+            
+            doc.setFontSize(12);
+            doc.setFont(undefined, 'normal');
+            doc.text(`Cases This Month: ${caseCount}`, 30, 95);
+            doc.text(`Total Dosages: ${doseCount}`, 30, 105);
+            doc.text(`Completed Dosages: ${completedCount}`, 30, 115);
+            doc.text(`Missed Dosages: ${missedCount}`, 30, 125);
+            
+            // Calculate completion rate
+            const totalDoses = parseInt(doseCount) || 0;
+            const completed = parseInt(completedCount) || 0;
+            const completionRate = totalDoses > 0 ? ((completed / totalDoses) * 100).toFixed(1) : 0;
+            
+            doc.text(`Completion Rate: ${completionRate}%`, 30, 135);
+            
+            // Add chart as image
+            if (window.doseChart) {
+                const chartCanvas = document.getElementById('doseChart');
+                const chartImage = chartCanvas.toDataURL('image/png');
+                
+                doc.setFontSize(16);
+                doc.setFont(undefined, 'bold');
+                doc.text('Chart Analysis', 20, 160);
+                
+                // Add chart image
+                doc.addImage(chartImage, 'PNG', 20, 170, 170, 100);
+            }
+            
+            // Add footer
+            doc.setFontSize(10);
+            doc.setFont(undefined, 'italic');
+            doc.text('Generated by Rabies Patient Dashboard System', 20, 285);
+            
+            // Save the PDF
+            doc.save(`Rabies_Dashboard_Report_${monthYear.replace(' ', '_')}.pdf`);
+        }
     </script>
 
 </body>

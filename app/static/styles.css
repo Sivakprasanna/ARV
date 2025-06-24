@@ -400,68 +400,6 @@ td a {
 td a:hover {
     background-color: var(--primary-light);
 }
-
-/* Dashboard specific styles */
-.dashboard-container {
-    max-width: 1200px;
-    margin: 20px auto;
-    padding: 24px;
-    background: var(--surface);
-    border-radius: var(--border-radius-xl);
-    box-shadow: var(--shadow-lg);
-    border: 1px solid var(--border-color);
-    width: 95%;
-}
-
-.dashboard-container h1 {
-    text-align: center;
-    margin-bottom: 32px;
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--text-primary);
-}
-
-.stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 16px;
-    margin-bottom: 32px;
-}
-
-.stat-box {
-    background: var(--surface-variant);
-    border: 1px solid var(--border-color);
-    padding: 20px;
-    border-radius: var(--border-radius-lg);
-    text-align: center;
-    transition: var(--transition);
-}
-
-.stat-box:hover {
-    background: var(--surface);
-    border-color: var(--primary-color);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
-}
-
-.stat-title {
-    font-size: 12px;
-    font-weight: 500;
-    margin-bottom: 8px;
-    color: var(--text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.stat-value {
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--primary-color);
-    line-height: 1;
-}
-
-/* Cleaned & Responsive Dashboard CSS */
-
 .dashboard-container {
     width: 100%;
     max-width: none;
@@ -486,7 +424,7 @@ td a:hover {
 
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 16px;
     width: 100%;
 }
@@ -494,10 +432,14 @@ td a:hover {
 .stat-box {
     background: var(--surface-variant);
     border: 1px solid var(--border-color);
-    padding: 16px;
+    padding: 20px;
     border-radius: var(--border-radius-lg);
     text-align: center;
     transition: var(--transition);
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .stat-box:hover {
@@ -510,14 +452,15 @@ td a:hover {
 .stat-title {
     font-size: 12px;
     font-weight: 500;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
     color: var(--text-secondary);
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    line-height: 1.2;
 }
 
 .stat-value {
-    font-size: 1.75rem;
+    font-size: 2rem;
     font-weight: 700;
     color: var(--primary-color);
     line-height: 1;
@@ -526,32 +469,33 @@ td a:hover {
 .chart-container {
     width: 100%;
     background: var(--surface);
-    padding: 16px 12px;
+    padding: 20px;
     border-radius: var(--border-radius-lg);
     box-shadow: var(--shadow-md);
     border: 1px solid var(--border-color);
-    min-height: 200px;
+    min-height: 400px;
     overflow-x: auto;
+    flex: 1;
 }
 
 .chart-container canvas {
     width: 100% !important;
-    height: auto !important;
-    max-height: 220px;
+    height: 350px !important;
+    max-height: none !important;
 }
 
 .chart-navigation {
     display: flex;
     justify-content: space-between;
     gap: 12px;
-    margin-top: 0;
+    margin-top: auto;
     flex-wrap: wrap;
     width: 100%;
 }
 
 .chart-navigation button {
     flex: 1;
-    padding: 10px 16px;
+    padding: 12px 20px;
     background-color: var(--primary-color);
     color: white;
     font-weight: 500;
@@ -559,72 +503,217 @@ td a:hover {
     border-radius: var(--border-radius);
     cursor: pointer;
     transition: var(--transition);
-    min-width: 100px;
-    max-width: 48%;
+    min-width: 120px;
+    font-size: 16px;
 }
 
 .chart-navigation button:hover {
     background-color: var(--primary-hover);
 }
 
-@media screen and (max-width: 768px) {
-    .dashboard-container {
-        padding: 12px;
-    }
+.download-section {
+    display: flex;
+    justify-content: center;
+    margin-top: 16px;
+    width: 100%;
+}
 
+.download-btn {
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: white;
+    font-weight: 600;
+    font-size: 16px;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: var(--shadow-md);
+    min-width: 180px;
+    justify-content: center;
+}
+
+.download-btn:hover {
+    background: linear-gradient(135deg, #218838, #1ea085);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.download-btn:active {
+    transform: translateY(0);
+}
+
+.download-icon {
+    font-size: 18px;
+}
+
+/* Tablet styles */
+@media screen and (max-width: 1024px) {
     .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: 1fr;
         gap: 12px;
     }
-
+    
     .stat-box {
-        padding: 12px;
+        padding: 16px;
+        min-height: 80px;
     }
-
-    .stat-title {
-        font-size: 11px;
-    }
-
-    .stat-value {
-        font-size: 1.5rem;
-    }
-
+    
     .chart-container {
-        padding: 12px;
+        height: 40vh;
+        min-height: 300px;
+        max-height: 450px;
     }
-
-    .chart-navigation {
-        flex-direction: row;
-        gap: 10px;
-    }
-
-    .chart-navigation button {
-        padding: 10px;
-        font-size: 14px;
+    
+    .chart-container canvas {
+        height: calc(100% - 40px) !important;
     }
 }
 
-@media screen and (max-width: 480px) {
+/* Mobile styles */
+@media screen and (max-width: 768px) {
+    .dashboard-container {
+        padding: 12px;
+        gap: 16px;
+        min-height: 100vh;
+        max-height: 100vh;
+        overflow-y: auto;
+    }
+
+    .dashboard-container h1 {
+        font-size: 2rem;
+        margin-bottom: 12px;
+        font-weight: 700;
+    }
+
     .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: 1fr;
         gap: 10px;
     }
 
+    .stat-box {
+        padding: 18px;
+        min-height: 80px;
+        border-radius: var(--border-radius);
+    }
+
+    .stat-title {
+        font-size: 16px;
+        margin-bottom: 10px;
+        font-weight: 600;
+        line-height: 1.2;
+    }
+
+    .stat-value {
+        font-size: 2.5rem;
+        font-weight: 700;
+    }
+
     .chart-container {
-        padding: 10px;
+        padding: 16px 12px;
+        height: 50vh;
+        min-height: 280px;
+        max-height: 400px;
+        overflow: hidden;
+    }
+
+    .chart-container canvas {
+        height: calc(100% - 20px) !important;
     }
 
     .chart-navigation {
         flex-direction: row;
+        gap: 10px;
+        margin-top: 0;
+    }
+
+    .chart-navigation button {
+        padding: 14px 20px;
+        font-size: 18px;
+        min-width: 0;
+        flex: 1;
+        font-weight: 600;
+    }
+
+    .download-btn {
+        padding: 16px 24px;
+        font-size: 18px;
+        min-width: 200px;
+    }
+
+    .download-icon {
+        font-size: 20px;
+    }
+}
+
+/* Small mobile styles */
+@media screen and (max-width: 480px) {
+    .dashboard-container {
+        padding: 10px;
+        gap: 12px;
+    }
+
+    .dashboard-container h1 {
+        font-size: 1.8rem;
+        margin-bottom: 10px;
+        font-weight: 700;
+    }
+
+    .stats-grid {
+        gap: 8px;
+    }
+
+    .stat-box {
+        padding: 16px;
+        min-height: 70px;
+    }
+
+    .stat-title {
+        font-size: 15px;
+        margin-bottom: 8px;
+        font-weight: 600;
+    }
+
+    .stat-value {
+        font-size: 2.2rem;
+        font-weight: 700;
+    }
+
+    .chart-container {
+        padding: 12px 8px;
+        height: 45vh;
+        min-height: 250px;
+        max-height: 350px;
+    }
+
+    .chart-container canvas {
+        height: calc(100% - 15px) !important;
+    }
+
+    .chart-navigation {
         gap: 8px;
     }
 
     .chart-navigation button {
-        font-size: 13px;
-        padding: 8px;
-        max-width: 48%;
+        padding: 12px 16px;
+        font-size: 17px;
+        font-weight: 600;
+    }
+
+    .download-btn {
+        padding: 14px 20px;
+        font-size: 17px;
+        min-width: 180px;
+    }
+
+    .download-icon {
+        font-size: 18px;
     }
 }
+
 /* Enhanced Mobile Responsiveness */
 @media screen and (max-width: 768px) {
     body {
@@ -633,8 +722,8 @@ td a:hover {
     }
     
     .action-btn {
-        font-size: 16px; /* Increased font size for readability */
-        padding: 16px 20px; /* Larger padding for better touch area */
+        font-size: 16px;
+        padding: 16px 20px;
     }
     
     .container {
@@ -671,10 +760,9 @@ td a:hover {
     input[type="date"],
     input[type="tel"],
     input[type="email"],
-
     select,
     textarea {
         padding: 10px 12px;
-        font-size: 16px; /* Prevent zoom on iOS */
+        font-size: 16px;
     }
 }
