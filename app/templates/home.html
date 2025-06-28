@@ -1,40 +1,57 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Home</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Rabicure Home</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='patientList.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
 </head>
 <body>
-<div class="button-container">
-    <div id="staff-buttons" style="display: none;">
-        <button class="action-btn" onclick="location.href='{{ url_for('patient.register_patient') }}'">
-            Register New Patient
-        </button>
-        <button class="action-btn" onclick="location.href='{{ url_for('general.view_patients') }}'">
-            View All Patients
-        </button>
-    </div>
 
-    <div id="officer-buttons" style="display: none;">
-        <button class="action-btn" onclick="location.href='{{ url_for('general.view_patients') }}'">
-            View All Patients
-        </button>
-        <button class="action-btn" onclick="location.href='{{ url_for('dashboard.dashboard_page') }}'">
-            View Dashboard
-        </button>
+<!-- Header -->
+<header class="app-header">
+        <div class="logo-title">
+            <img src="{{ url_for('static', filename='images/logo.jpeg') }}" alt="Rabicure Logo" class="logo-img">
+            <span class="app-title">Rabicure</span>
+        </div>
+    </header>
+
+<!-- Buttons -->
+ <div class="button-container-wrapper">
+    <div class="button-container">
+        <br><br><br>
+        <div id="staff-buttons" style="display: none;">
+            <button class="action-btn" onclick="location.href='{{ url_for('patient.register_patient') }}'">
+                <img src="{{ url_for('static', filename='images/registerPatient.png') }}" alt="Register Icon">
+                <span>Register New Patient</span>
+            </button>
+            <button class="action-btn" onclick="location.href='{{ url_for('general.view_patients') }}'">
+                <img src="{{ url_for('static', filename='images/list.png') }}" alt="List Icon">
+                <span>View All Patients</span>
+            </button>
+        </div>
+
+        <div id="officer-buttons" style="display: none;">
+            <button class="action-btn" onclick="location.href='{{ url_for('general.view_patients') }}'">
+                <img src="{{ url_for('static', filename='images/list.png') }}" alt="List Icon">
+                <span>View All Patients</span>
+            </button>
+            <button class="action-btn" onclick="location.href='{{ url_for('dashboard.dashboard_page') }}'">
+                <img src="{{ url_for('static', filename='images/dashboard.png') }}" alt="Dashboard Icon">
+                <span>View Dashboard</span>
+            </button>
+        </div>
     </div>
-</div>
+ </div>
 
 <script>
     const role = "{{ role }}";
-
     if (role === "phc_staff") {
-        document.getElementById("staff-buttons").style.display = "block";
+        document.getElementById("staff-buttons").style.display = "flex";
     } else if (role === "medical_officer") {
-        document.getElementById("officer-buttons").style.display = "block";
+        document.getElementById("officer-buttons").style.display = "flex";
     }
 </script>
 
 </body>
-
 </html>

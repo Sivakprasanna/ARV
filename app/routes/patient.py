@@ -64,7 +64,8 @@ def register_patient():
 
             dose_schedule = [(i + 1, (today + timedelta(days=d)).strftime('%Y-%m-%d')) for i, d in enumerate(dose_days)]
 
-
+            conn.commit()
+            
             return render_template('success.html',
                                    name=name,
                                    patient_id=patient_id,

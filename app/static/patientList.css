@@ -48,7 +48,7 @@ h2 {
 /* Navigation Buttons */
 .menu-btn, .back-btn {
     position: fixed;
-    top: 16px;
+    top: 85px;
     padding: 10px 14px;
     font-size: 14px;
     border: 1px solid var(--border-color);
@@ -202,4 +202,49 @@ h2 {
 }
 [data-status="missed"] .info-group:nth-child(3) .value {
     color: var(--danger-color);
+}
+
+/* App Header */
+.app-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 16px;
+    background-color: #10b981;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-md);
+    position: sticky;
+    top: 0;
+}
+
+.logo-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-img {
+    height: 40px;
+    width: 40px;
+    object-fit: contain;
+    border-radius: var(--border-radius);
+}
+
+.app-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: white;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Responsive adjustments if needed */
+@media (max-width: 240px) {
+    .app-title {
+        font-size: 1.2rem;
+    }
+
+    .logo-img {
+        height: 30px;
+        width: 30px;
+    }
 }

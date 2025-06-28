@@ -5,13 +5,21 @@
     <title>Rabies Patient Dashboard</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='patientList.css') }}">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
-
-    <div class="dashboard-container">
+    <div class="dashboard-container">   
+        <header class="app-header">
+        <div class="logo-title">
+            <img src="{{ url_for('static', filename='images/logo.jpeg') }}" alt="Rabicure Logo" class="logo-img">
+            <span class="app-title">Rabicure</span>
+        </div>
+    </header>
+    <br><br>
         <h1>Monthly Rabies Dashboard</h1>
 
+        
         <!-- Statistics Grid -->
         <div class="stats-grid">
             <div class="stat-box">

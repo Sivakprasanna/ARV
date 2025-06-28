@@ -3,14 +3,23 @@
 <head>
     <title>{{ patient.name }} - Details</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='patientList.css') }}">
     <meta name="viewport" content="width=device-width, initial-scale=1" />    
 </head>
 <body>
 
 <div class="container">
+    <header class="app-header">
+    <div class="logo-title">
+        <img src="{{ url_for('static', filename='images/logo.jpeg') }}" alt="Rabicure Logo" class="logo-img">
+        <span class="app-title">Rabicure</span>
+    </div>
+</header>
+<!--
     <p style="text-align: center; margin-top: 20px;">
         <a href="{{ url_for('general.view_patients') }}" style="text-decoration: none; color: #007bff;">← Back to Patients List</a>
     </p>
+-->
     <h2>{{ patient.name }} ({{ patient.patient_id }})</h2>
 
     <div class="section">

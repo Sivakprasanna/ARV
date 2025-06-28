@@ -1,0 +1,116 @@
+.button-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 16px;
+            min-height: calc(100vh - 70px); /* leave space for header */
+            gap: 20px;
+            background: linear-gradient(to top, #e0f2fe, #ffffff);
+        }
+#staff-buttons,
+#officer-buttons {
+    width: 100%;
+    max-width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Stacked buttons */
+.action-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 20px;
+    width: 100%;
+    background-color: #2563eb;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    transition: background 0.2s ease, transform 0.2s ease;
+    text-align: center;
+}
+
+.action-btn:hover {
+    background-color: #1d4ed8;
+    transform: translateY(-2px);
+}
+
+.action-btn img {
+    height: 50px;
+    width: 50px;
+    object-fit: contain;
+    pointer-events: none;
+}
+
+/* Button styles */
+.action-btn {
+    width: 100%;
+    max-width: 300px;
+    margin: 12px 0;
+    padding: 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
+    background-color: #2563eb;
+    color: white;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.action-btn:hover {
+    background-color: #1d4ed8;
+    transform: translateY(-2px);
+}
+.button-container-wrapper {
+    position: relative;
+    min-height: 100vh;        
+}
+.action-btn img {
+    height: 60px;
+    width: 60px;
+    margin-bottom: 10px;
+}
+
+@media (min-width: 600px) {
+    .button-container {
+        flex-direction: row;
+        gap: 24px;
+    }
+
+    .action-btn {
+        margin: 0;
+        flex: 1;
+        max-width: 250px;
+    }
+}
+.hero-bg {
+    position: absolute;
+    top: 0; /* Add this to ensure it's placed at the top */
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 800px;
+    background: url('/static/images/sorryDog.png') no-repeat center top;
+    background-size: contain;
+    opacity: 0.6;
+    pointer-events: none;
+    z-index: 0;
+}
+
+body {
+    background: linear-gradient(to bottom, #f0f9ff, #f8fafc);
+}
