@@ -189,12 +189,12 @@
                 });
         }
 
-        function loadPrevious() {
+        function loadNext() {
             currentMonthOffset -= 1;
             fetchDashboardData();
         }
 
-        function loadNext() {
+        function loadPrevious() {
             currentMonthOffset += 1;
             fetchDashboardData();
         }
@@ -251,7 +251,7 @@
             
             // Calculate month for report
             const reportMonth = new Date();
-            reportMonth.setMonth(reportMonth.getMonth() + currentMonthOffset);
+            reportMonth.setMonth(reportMonth.getMonth() - currentMonthOffset);
             const monthYear = reportMonth.toLocaleDateString('en-US', {
                 year: 'numeric',
                 month: 'long'
